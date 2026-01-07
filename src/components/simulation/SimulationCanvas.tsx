@@ -17,6 +17,7 @@ export function SimulationCanvas() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<Application | null>(null);
   const [positions, setPositions] = useState<Map<string, NodePosition>>(new Map());
+  const [isReady, setIsReady] = useState(false);
 
   const { state, engine, selectedCharacterId, selectCharacter } = useSimulationStore();
 
@@ -36,6 +37,7 @@ export function SimulationCanvas() {
       if (canvasRef.current && app.canvas) {
         canvasRef.current.appendChild(app.canvas as HTMLCanvasElement);
         appRef.current = app;
+        setIsReady(true); // Trigger re-render to start drawing
       }
     });
 
@@ -156,7 +158,7 @@ export function SimulationCanvas() {
         nodeContainer.addChild(label);
       }
     }
-  }, [state, positions, engine, selectedCharacterId, selectCharacter]);
+  }, [state, positions, engine, selectedCharacterId, selectCharacter, isReady]);
 
   return (
     <div
